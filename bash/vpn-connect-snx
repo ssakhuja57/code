@@ -1,0 +1,23 @@
+#!/bin/bash
+
+SERVER="example.com"
+UNAME="user123"
+PASS="pass123"
+
+set echo off
+check=$(ps -aef | grep -e "snx -s $SERVER -u $UNAME" -c)
+
+if [ "$check" -ge "2" ]; then
+	echo "vpn already connected"
+else
+	echo -n "establishing vpn connection..."
+	snx -s $SERVER -u $UNAME <<< "$PASS" > /dev/null
+	
+	sleep 2
+	verify=$(ps -aef | grep -e "snx -s $SERVER -u $UNAME" -c)
+	if [ "$verify" -ge "2" ]; then
+	    	echo "successful"
+	else
+		echo "failed"
+	fi
+fi

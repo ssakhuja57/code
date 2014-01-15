@@ -1,0 +1,22 @@
+#!/usr/bin/expect
+
+SERVER="example.com"
+UNAME="user123"
+PASS="pass123"
+
+#log_user 0
+spawn snx -s $SERVER -p 443 -u $UNAME
+expect {
+	 "Please enter your password:" {
+#		send_user "establishing vpn connection..."
+		send "$PASS"
+		expect eof
+		send_user "successful\n"
+		exit 0
+	}
+	eof {
+		send_user "vpn is already connected\n"
+		exit 0
+	}
+}
+

@@ -1,0 +1,65 @@
+#!/usr/bin/bash
+
+###################################
+# Author: Shubham Sakhuja 2014/01/13
+# Purpose: establish vpn connection through netExtender and then ssh into server with local forward options
+# 
+# Dependencies: 
+# - Proper forwards specifed in /root/.ssh/config for host to ssh into
+# - public ssh key for root user on this machine stored on machine to ssh into
+#
+# Additional Dependencies if setting up vpnproxy (or any other non-admin) user to run script upon ssh login into this machine:
+# - change permissions on this script to 711
+# - file in /etc/sudoers.d/ to allow a specified user to run this script via sudo
+# - call to run this script with sudo in non-admin user's .bashrc file
+# 
+####################################
+#
+# Config
+# 
+VPN_SERVER="example.com"
+VPN_SERVER_PORT="443"
+UNAME="user123"
+DOMAIN="domain123"
+PASS="pass123"
+SSH_HOST="cloud123" # as defined in /root/.ssh/config file
+#
+#
+####################################
+
+check_vpn=$(ps aux | grep -e "netExtender $VPN_SERVER:$VPN_SERVER_PORT -u $UNAME -d $DOMAIN" -c)
+check_ssh=$(ps aux | grep -e "ssh -N root@$SSH_HOST" -c)
+
+if [ "$check_vpn" -ge "2" ] && [ "$check_ssh" -ge "2" ]; then
+	echo "vpn already connected"
+else
+	echo -n "establishing vpn connection..."
+	
+	# kill existing screen sessions
+	for session in $(screen -ls | grep -o '[0-9]\{3,\}')
+	do
+		screen -S "${session}" -X quit;
+	done
+	
+	# new screen session for vpn
+	screen -dmS vpn netExtender $VPN_SERVER:$VPN_SERVER_PORT -u $UNAME -d $DOMAIN
+	# wait and then send password to vpn screen (this is more secure than passing in password with -p option since that way it would show up in process tree)
+	sleep 2
+	screen -r -d -X stuff "$PASS\n"
+	# wait and then send confirmation to connect even though SSL cert is self-signed
+	sleep 3
+	screen -r -d -X stuff "Y\n"
+	# new screen session for non-interactive ssh session into host
+	sleep 3
+	screen -dmS ssh ssh -N root@$SSH_HOST
+	
+	# verify that both vpn and ssh connections are still established
+	sleep 2
+	verify_vpn=$(ps aux | grep -e "netExtender $VPN_SERVER:$VPN_SERVER_PORT -u $UNAME -d $DOMAIN" -c)
+	verify_ssh=$(ps aux | grep -e "ssh -N root@$SSH_HOST" -c)
+	if [ "$verify_vpn" -ge "2" ] && [ "$verify_ssh" -ge "2" ]; then
+		echo "successful"
+	else
+		echo "failed"
+	fi
+fi

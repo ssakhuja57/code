@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+SSH_HOST="zpt"
+
+check=$(ps aux | grep -e "ssh -N root@$SSH_HOST" -c)
+
+if [ "$check" -ge "2" ]; then
+	echo "vpn already connected"
+else
+	echo -n "establishing vpn connection..."
+	screen -dmS vpn ssh -N root@$SSH_HOST
+	
+	verify=$(ps aux | grep -e "ssh -N root@$SSH_HOST" -c)
+	if [ "$verify" -ge "2" ]; then
+		echo "successful"
+	else
+		echo "failed"
+	fi
+fi
