@@ -12,14 +12,23 @@ public class MoveDeleteUnreferencedFiles {
 	public static void main(String[] args) throws IOException {
 		
 		System.out.println();
-		if (args.length < 2){
-        	System.out.println("Usage: specify root vault folder and a substring common in vault folder names that identifies each as a vault folder");
-        	System.out.println("\nExample: java MoveDeleteUnreferencedFiles \"C:/ptc/vaults\" \"defaultmasterfolder\"");
+		if (args.length < 3){
+        	System.out.println("Usage: specify root vault folder, a substring common in vault folder names that identifies each as a vault folder, "
+        			+ "and whether or not this is a Unix system (true or false)");
+        	System.out.println("\nExample: java MoveDeleteUnreferencedFiles \"C:/ptc/vaults\" \"defaultmasterfolder\" false");
+		System.out.println();
         	System.exit(1);
         }
 		
 		String vaultRoot = args[0];
         String folderPattern = args[1];
+        String is_unix = args[2];
+        
+        boolean unix = false;
+        if (is_unix.equals("true")) unix = true;      
+        
+	String bash1 = "/bin/bash";
+        String bash2 = "-c";
         
         int curr_month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int curr_year = Calendar.getInstance().get(Calendar.YEAR);
@@ -39,9 +48,16 @@ public class MoveDeleteUnreferencedFiles {
         File curr_dest = new File(vaultRoot + "/unreferenced_" + curr_date);
         
         System.out.println("deleting folder \"" + last_dest.getAbsolutePath() + "\" ...");
-        if (last_dest.exists()) Runtime.getRuntime().exec(new String[]{"rm -rf " + last_dest.getAbsolutePath()});
-        else System.out.println("\""+ last_dest.getAbsolutePath() + "\" does not exist, skipping");
-        Runtime.getRuntime().exec(new String[]{"mkdir " + "\"" + curr_dest.getAbsolutePath() + "\""});
+        if (last_dest.exists()){
+        	if (unix) Runtime.getRuntime().exec(new String[]{bash1, bash2, "rm -rf \"" + last_dest.getAbsolutePath() + "\""});
+        	else Runtime.getRuntime().exec("rm -rf " + last_dest.getAbsolutePath());
+        }
+        else {
+		System.out.println("\""+ last_dest.getAbsolutePath() + "\" does not exist, skipping");
+	}
+        
+        if (unix) Runtime.getRuntime().exec(new String[]{bash1, bash2, "mkdir \"" + curr_dest.getAbsolutePath() + "\""});
+        else Runtime.getRuntime().exec("mkdir " + "\"" + curr_dest.getAbsolutePath() + "\"");
         System.out.println();
         
         for (File folder: folders){
@@ -51,7 +67,8 @@ public class MoveDeleteUnreferencedFiles {
         		if (unref.exists()){
         			File target = new File(curr_dest.getAbsolutePath() + "/" + unref.getParentFile().getName() + "_unreferenced");
         			System.out.println("executing command: mv " + "\"" + unref.getAbsolutePath() + "\" " + "\"" + target + "\"");
-        			Runtime.getRuntime().exec("mv " + "\"" + unref.getAbsolutePath() + "\" " + "\"" + target + "\"");
+        			if (unix) Runtime.getRuntime().exec(new String[]{bash1, bash2, "mv \"" + unref.getAbsolutePath() + "\" \"" + target.getAbsolutePath() + "\""});
+        			else Runtime.getRuntime().exec("mv " + "\"" + unref.getAbsolutePath() + "\" " + "\"" + target + "\"");
         		}
         		else{
         			System.out.println("\"" + folder.getAbsolutePath() + "\" does not contain a .unreferenced folder, skipping");
