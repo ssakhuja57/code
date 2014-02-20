@@ -1,0 +1,14 @@
+def mode(L):
+    counts = {}
+    for i in L:
+        if counts.get(i) is None:
+            counts[i] = 1
+        else:
+            counts[i] += 1
+    max_count = 0
+    mode = None
+    for i in counts:
+        if counts[i] > max_count:
+            max_count = counts[i]
+            mode = i
+    return mode
