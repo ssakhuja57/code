@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from random import randint
 
 def sort_quick(L):
@@ -90,3 +92,31 @@ def find_intersect(L1, L2):
     return inter
 
 #print find_intersect([5,1,8,9,3], [4,3,5,1,9,92,0])
+
+def sort_insertion(L):
+	if len(L) <= 1: return L
+	idx = 1
+	value = L[idx]
+	insert = idx - 1
+	print idx #
+	print L #
+	while True:
+		if insert > 0 and L[idx] < L[insert]:
+			insert -= 1
+		else:
+			if L[idx] < L[idx-1]:
+				if L[idx] > L[insert]:
+					insert += 1
+				for i in range(idx-1, insert-1, -1):
+					L[i+1] = L[i]
+				L[insert] = value
+			idx += 1
+			if idx >= len(L):
+				break
+			value = L[idx]
+			insert = idx - 1
+			print idx #
+			print L #
+	return L
+
+print sort_insertion([4,2,5,1,7,9,6,7])
