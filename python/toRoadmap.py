@@ -2,11 +2,8 @@
 
 ########################################################
 
-<<<<<<< HEAD
-site = 'https://support.boston-engineering.com:443'
-=======
 site = 'https://example.com:443'
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
+
 link_type = 'Roadmap'
 # comp = 'Business Administration Support'
 
