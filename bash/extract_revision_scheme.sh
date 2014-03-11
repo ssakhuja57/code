@@ -1,0 +1,7 @@
+#!/bin/bash
+
+while read LINE 
+do
+	echo "$LINE" | sed -rn 's/<value[^>]*>(.+)<\/value>/\1/p' >> /cygdrive/d/input/revision_scheme.txt
+done < /cygdrive/d/input/revision_scheme_raw.txt
+

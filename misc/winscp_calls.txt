@@ -1,0 +1,4 @@
+open ftp://192.168.6.15:21
+synchronize -delete local "c:\users\bec\Documents\staging" "\"
+close
+exit
