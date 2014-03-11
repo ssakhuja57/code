@@ -1,10 +1,8 @@
 #!/usr/bin/bash
 
-<<<<<<< HEAD
+
 SSH_HOST="zpt"
-=======
-SSH_HOST="abc"
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
+
 
 check=$(ps aux | grep -e "ssh -N root@$SSH_HOST" -c)
 
@@ -21,7 +19,3 @@ else
 		echo "failed"
 	fi
 fi
-<<<<<<< HEAD
-=======
-
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
