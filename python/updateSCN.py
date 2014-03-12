@@ -2,21 +2,8 @@
 
 ####################################################
 
-<<<<<<< HEAD
-jira_site = "https://support.boston-engineering.com"
+site = 'https://example.com:443'
 
-SCNs = {'aflglobal.com': 'SCN-1024',
-	'cyclingsportsgroup.com': 'SCN-2043',
-	'fdwt.com': 'SCN-5367',
-	'oginenergy.com': 'SCN-5367',
-	'ilww.com': 'SCN-3165',
-	'mmicglobal.com': 'SCN-4421',
-	'sie-cs.com': 'SCN-6215',
-	'zeropointusa.com': 'SCN-8126'
-	}
-
-site = 'https://support.boston-engineering.com:443'
-=======
 SCNs = {'cl1.com': 'SCN-1024',
 	'cl2.com': 'SCN-2043',
 	'cl3.com': 'SCN-5367',
@@ -27,8 +14,6 @@ SCNs = {'cl1.com': 'SCN-1024',
 	'cl8.com': 'SCN-8126'
 	}
 
-site = 'https://example.com:443'
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
 
 ####################################################
 
@@ -115,31 +100,23 @@ print "\n\nA total of {0} tickets were updated with an SCN\n".format(updated_cou
 
 
 #def updateSCN(ticket_key, SCN_num):
-<<<<<<< HEAD
-#	update_headers = {"Authorization":"Basic c3Nha2h1amFAYm9zdG9uLWVuZ2luZWVyaW5nLmNvbTpUaW5hMTExOQ==", "Content-Type":"application/json"}
-=======
+
 #	update_headers = {"Authorization":"Basic base64encoded-uname:pword", "Content-Type":"application/json"}
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
 #	jira_api_put = jira_site + "/rest/api/2/issue/"
 #	update = {"fields": {"customfield_10101": {"name":SCN_num}}}
 #	update_json = json.dumps(update)
 #	update_url = jira_api_put + ticket_key
 #
-<<<<<<< HEAD
-#	update_call = """curl -D- -v SSLv3 -H "Authorization: Basic c3Nha2h1amFAYm9zdG9uLWVuZ2luZWVyaW5nLmNvbTpUaW5hMTExOQ==" -X PUT --data "{0}" -H "Content-Type: application/json" {1}""".format(update_json.replace("\"", "\\\""), update_url)
-=======
+
 #	update_call = """curl -D- -v SSLv3 -H "Authorization: Basic base64encoded-uname:pword" -X PUT --data "{0}" -H "Content-Type: application/json" {1}""".format(update_json.replace("\"", "\\\""), update_url)
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
 #
 #	subprocess.call(update_call, shell=True)
 #
 #
 #jira_api_get = jira_site + "/rest/api/2/search?jql={0}&fields={1}"
-<<<<<<< HEAD
-#get_headers = {"Authorization":"Basic c3Nha2h1amFAYm9zdG9uLWVuZ2luZWVyaW5nLmNvbTpUaW5hMTExOQ=="}
-=======
+
 #get_headers = {"Authorization":"Basic base64encoded-uname:pword"}
->>>>>>> cfd9833df39116f351a1a4e363e5358d1ea771a4
+
 #
 #since_date = date.today() - timedelta(days=days_ago)
 #since_date = str(since_date).replace("-","/")
