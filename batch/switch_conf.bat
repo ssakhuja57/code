@@ -5,11 +5,15 @@ if %cur24_hr% GEQ 0 (if %cur24_hr% LEQ 10 (set M=AM))
 if %cur24_hr% EQU 11 (set M=PM)
 if %cur24_hr% GEQ 12 (if %cur24_hr% LEQ 22 (set M=PM))
 
-echo The system is currently under nightly maintenance until %end_hr%%time:~2,3% %M% > "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\htdocs\test\test1.html"
-move "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf" "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf_std"
-move "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf_mtce" "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf"
+set std_conf="C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf"
+set maint_conf="C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd_main.conf"
+set maint_page="C:\Program Files (x86)\Apache Software Foundation\Apache2.2\htdocs\test\test1.html"
+
+echo The system is currently under nightly maintenance until %end_hr%%time:~2,3% %M% > "%maint_page%"
+move "%std_conf%" "%std_conf%_std"
+move "%maint_conf%" "%std_conf%"
 net stop Apache2.2 && net start Apache2.2
 timeout 30
-move "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf" "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf_mtce"
-move "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf_std" "C:\Program Files (x86)\Apache Software Foundation\Apache2.2\conf\httpd.conf"
+move "%std_conf%" "%maint_conf%"
+move "%std_conf%_std" "%std_conf%"
 net stop Apache2.2 && net start Apache2.2
