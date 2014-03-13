@@ -12,8 +12,9 @@ print add(*nums)
 
 def packing_example(kind, *arguments, **keywords):
 	print "Hello there", kind
+	print '-'*50
 	for arg in arguments: print arg
-	print '-'*10
+	print '-'*50
 	keys = keywords.keys()
 	# Note that the sort() method of the list of keyword argument names is called before printing the contents 
 	# of the keywords dictionary; if this is not done, the order in which the arguments are printed is undefined. 
