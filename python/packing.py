@@ -10,21 +10,16 @@ print add(4,9,1,0)
 nums = [4,9,1,0]
 print add(*nums)
 
-def cheeseshop(kind, *arguments, **keywords):
-	print "-- Do you have any", kind, '?'
-	print "-- I'm sorry, we're all out of", kind
+def packing_example(kind, *arguments, **keywords):
+	print "Hello there", kind
 	for arg in arguments: print arg
-	print '-'*40
+	print '-'*10
 	keys = keywords.keys()
 	# Note that the sort() method of the list of keyword argument names is called before printing the contents 
 	# of the keywords dictionary; if this is not done, the order in which the arguments are printed is undefined. 
 	keys.sort()
-	for kw in keys: print kw, ':', keywords[kw]
+	for key in keys: print key, ':', keywords[key]
 
 
-cheeseshop('Limburger', "It's very runny, sir.",
-       "It's really very, VERY runny, sir.",
-       client='John Cleese',
-       shopkeeper='Michael Palin',
-       sketch='Cheese Shop Sketch')
+packing_example('Mr. Rogers', "Test Item 1", "Test Item 2", user='user123', place='Cali', something='something else')
 
