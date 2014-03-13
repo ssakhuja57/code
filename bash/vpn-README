@@ -1,0 +1,13 @@
+Important notes for making vpn-connection scripts be as secure as possible:
+
+- vpn-connect-* script should be owned by root user and root group
+- permissions on vpn-connect-* should be 711 so that it can be fully controlled by root and only executed by others
+- add a file in the /etc/sudoers.d/ directory (name of file doesn't matter) with the line:
+	vpnproxy ALL =NOPASSWD: /usr/local/bin/vpn-connect
+	(replace 'vpnproxy' with the user you will use to ssh into this box)
+- this file should also be owned by root user and root group and permissions on it should be 440 (or else it will give you an error when you try to use)
+- in /home/vpnproxy/.bashrc, add the following line:
+	sudo <path-to-vpn-connect-*>
+	(again, 'vpnproxy' is should be replaced with the relevant user, and <path-to-vpn-connect-*> should be replaced with the full path of the vpn-connect-* script)
+
+After these steps, you should notice that when the 'vpnproxy' user ssh's into the box, it will kick off the vpn-connect-* script automatically, but the user won't be able to read that script even if they find it and try to open it. So, this way all passwords, etc. are safely hidden from the user.

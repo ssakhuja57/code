@@ -1,0 +1,60 @@
+#!/usr/bin/bash
+
+###################################
+# Author: Shubham Sakhuja 2014/01/13
+# Purpose: establish vpn connection through openconnect
+# 
+# Dependencies if setting up vpnproxy (or any other non-admin) user to run script upon ssh login into this machine:
+# - change permissions on this script to 711
+# - file in /etc/sudoers.d/ to allow a specified user to run this script via sudo
+# - call to run this script with sudo in non-admin user's .bashrc file
+# 
+####################################
+#
+# Config
+# 
+VPN_SERVER="example.server.com"
+UNAME="user123"
+PASS="pass123"
+GROUP="group123" # leave as empty string if group not applicable
+#
+#
+####################################
+
+check_vpn=$(ps aux | grep -e "openconnect --no-cert-check $VPN_SERVER -u $UNAME" -c)
+
+if [ "$check_vpn" -ge "2" ]; then
+	echo "vpn already connected"
+else
+	echo -n "establishing vpn connection..."
+	
+	# kill existing screen sessions
+	for session in $(screen -ls | grep -o '[0-9]\{3,\}')
+	do
+		screen -S "${session}" -X quit;
+	done
+	
+	# new screen session for vpn
+	screen -dmS vpn openconnect --no-cert-check $VPN_SERVER -u $UNAME
+	# wait and then send group and password to vpn screen (this is more secure than simply passing in password with -p option since that way it would show up in process tree)
+	
+	if [ "$GROUP" != "" ]; then
+		sleep 2
+		screen -r -d -X stuff "$GROUP\n"
+	fi
+
+	sleep 2
+	screen -r -d -X stuff "$PASS\n"
+	
+	# verify that vpn connections is still established
+	sleep 4
+	verify_vpn=$(ps aux | grep -e "openconnect --no-cert-check $VPN_SERVER -u $UNAME" -c)
+	if [ "$verify_vpn" -ge "2" ]; then
+		echo "successful"
+		# any extra lines for adding/deleting of default routes, etc. should be placed here:
+		#
+		#
+	else
+		echo "failed"
+	fi
+fi
