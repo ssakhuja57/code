@@ -98,8 +98,6 @@ def sort_insertion(L):
 	idx = 1
 	value = L[idx]
 	insert = idx - 1
-	print idx #
-	print L #
 	while True:
 		if insert > 0 and L[idx] < L[insert]:
 			insert -= 1
@@ -115,8 +113,6 @@ def sort_insertion(L):
 				break
 			value = L[idx]
 			insert = idx - 1
-			print idx #
-			print L #
 	return L
 
 print sort_insertion([4,2,5,1,7,9,6,7])
