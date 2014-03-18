@@ -1,0 +1,10 @@
+--below query finds working coipies of all checked out items and their user and owner (not sure if the order is correct on user then owner or other way around)
+
+select M.cadname, M.documentnumber as "NUMBER", D.versionida2versioninfo as revision, D.iterationida2iterationinfo as iteration, D.statecheckoutinfo as checkedoutinfo, U1.name as "MODIFIED BY", U2.name as "CHECKED OUT BY"
+from epmdocumentmaster M, epmdocument D, wtuser U1, wtuser U2
+where M.ida2a2=D.ida3masterreference
+and D.ida3d2iterationinfo=U1.ida2a2
+and D.ida3b2iterationinfo=U2.ida2a2
+and statecheckoutinfo = 'wrk'
+--and statecheckoutinfo <> 'c/i'
+;
