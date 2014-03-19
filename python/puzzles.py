@@ -1,20 +1,30 @@
-# need to fix end case, e.g. if it ended in 4423, it won't be right, could trim off ending flat line and handle one case only, or something else...
-
 # pool of variable depth:
 #
 # depths is expected to be a list that contains the consecutive depths of the pool, note that the depth at a given
-# index should be the height of the lower end of the vertical line segment at that index.
+# index should be the height of the limit approached from the right end of the line segment at that index.
+
+# this function trims off any existing flat line at the end of the pool
+def clean_pool(depths):
+    length = len(depths)
+    last = depths[length - 1]
+    for i in range(length-2, -1, -1):
+        if depths[i] == last:
+            depths.pop()
+        else:
+            break
 
 def total_volume(depths):
 
-        # ensure that depths ends in a flat line, so no special clause needed for end:
-        # depths.append(depths[len(depths)-1])
-
+        clean_pool(depths)
         volume = 0
         markers = []
-        for x in range(1, len(depths)):
+        last_counted_marker = ()
+        length = len(depths)
+        for x in range(1, length):
                 if depths[x] < depths[x-1]:
-                        markers.append((x,depths[x-1]))
+                        marker = (x,depths[x-1])
+                        markers.append(marker)
+                        last_marker = marker
                 elif depths[x] > depths[x-1]:
                         level = depths[x-1]
                         while True:
@@ -23,22 +33,16 @@ def total_volume(depths):
                                 except IndexError:
                                         break
                                 if depths[x] < prev_marker[1]:
-                                        # <specialcase>
-                                        # if it is end of pool
-                                        #if x == len(depths) - 1:
-                                        #       volume += (depths[x] - depths[x-1])*(x - prev_marker[0])
-                                        #       return volume
-                                        # </specialcase>
                                         markers.append(prev_marker)
                                         break
                                 #print x, (prev_marker[1] - level)*(x - prev_marker[0]) #debug
                                 volume += (prev_marker[1] - level)*(x - prev_marker[0])
                                 level = prev_marker[1]
-        #try:
-        #       prev_marker = markers.pop()
-        #except IndexError:
-        #       return volume
-        #if depths[len(depths)-1] < 
+                                last_counted_marker = prev_marker
+        print last_counted_marker
+        if last_marker != last_counted_marker and depths[length-1] < last_marker[1]:
+            volume += (depths[length-1] - depths[length-2])*(length-1 - last_marker[0])
         return volume
 
 print total_volume([3,2,1,1,0,1,0,2,0,4,4,2,3])
+
