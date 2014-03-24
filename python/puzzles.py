@@ -39,7 +39,6 @@ def total_volume(depths):
                                 volume += (prev_marker[1] - level)*(x - prev_marker[0])
                                 level = prev_marker[1]
                                 last_counted_marker = prev_marker
-        print last_counted_marker
         if last_marker != last_counted_marker and depths[length-1] < last_marker[1]:
             volume += (depths[length-1] - depths[length-2])*(length-1 - last_marker[0])
         return volume
