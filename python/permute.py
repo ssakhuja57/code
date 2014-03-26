@@ -7,6 +7,18 @@ def permute(word, res=[]):
 		word2 = rm_char(word, char)
 		res += [char + permute(word2, res)]
 
+def permute2(word):
+	if len(word) <= 1:
+		return word
+	word = str_to_list(word)
+	
+
+def str_to_list(string):
+	res = []
+	for i in string:
+		res += i
+	return res
+
 def rm_char(word, char):
 	word2 = ''
 	done = False
