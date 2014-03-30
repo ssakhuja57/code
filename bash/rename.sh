@@ -4,7 +4,8 @@
 # given pattern and rename them with the given prefix
 
 # important note that this will not work on any files that have a space (and possibly any other
-# similar special characters in their name or path)
+# similar special characters in their name or path). This apparently is because of the for blah in $(...) part
+# using a loop over the raw output of '...' is apparently not best practice
 
 pattern="*.*"
 prefix="test_"
