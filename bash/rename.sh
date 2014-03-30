@@ -20,4 +20,10 @@ do
         #echo $parent
         #echo $name
         #echo -------
-done
+done# so I guess below is the reason that file names with spaces won't be picked up (it's from a SO user):
+
+# The internal field separator (IFS) in bash is generally set to something like 
+# $'\t\n ' (whitespace), which means that bash will assume that a space delimits tokens, 
+# so it will split filenames with spaces into separate tokens to loop over rather than one filename
+
+
