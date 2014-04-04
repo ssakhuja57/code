@@ -69,3 +69,37 @@ ORDER BY t.grouping123, t.rank123 desc;
 
 -- Note, to find the bottom k instead, just flip the '<' to a '>'
 
+
+-- Here's a stored procedure that finds the top k of a single table:
+-- NOTE, this is for MySQL, syntax may be different for others...
+
+drop procedure if exists top_k;
+
+delimiter //
+
+create procedure top_k(IN schemaname varchar(50), IN tablename varchar(50), IN grouping varchar(50), IN ranking varchar(50), IN k varchar(5)) 
+begin 
+	set @table_fields = (
+	SELECT GROUP_CONCAT(`COLUMN_NAME` SEPARATOR ', t.')
+	FROM `information_schema`.`COLUMNS`
+	WHERE (`TABLE_SCHEMA` = schemaname)
+    AND (`TABLE_NAME` = tablename)
+    /*AND (`COLUMN_KEY` = 'PRI')*/ /* This is getting only primary keys of the table (doesn't work if table has no pk's...)*/
+	);
+
+    set @querystring=concat(
+			'SELECT t.* FROM ', tablename, ' t LEFT JOIN ',
+			tablename,' t2 ON (t.', grouping, '= t2.', grouping, ' AND t.',
+			ranking, ' < t2.', ranking,
+			') GROUP BY t.', @table_fields,
+			' HAVING COUNT(*) < ', k,
+            ' ORDER BY t.', grouping, ', t.', ranking, ' desc;'
+			);
+	select @querystring from dual;
+    prepare stmt from @querystring;
+    execute stmt;
+    deallocate prepare stmt;
+end
+//
+
+delimiter ;
