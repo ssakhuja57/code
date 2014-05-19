@@ -9,6 +9,9 @@ if (count($argv) != 1){
         exit(1);
         }
 
+
+$db = new db_mysql('localhost', 'root', 'pass123', 'dss_permissions');
+
 if ($argv[1] == 'create_users'){
 
         $output_file = './create_users.sql';
@@ -23,7 +26,6 @@ if ($argv[1] == 'create_users'){
                                from users u cross join
                                 (select distinct owning_schema from views) s;";
 
-        $db = new db_mysql('localhost', 'root', 'pass123', 'dss_permissions');
 
         $result_create_users = $db->read_query($query_create_users)[0];
 
@@ -65,8 +67,6 @@ elseif ($argv[1] == 'generate_permissions'){
                         cross join views v
                         ) x
                   order by owning_schema, view_name, uname;";
-
-        $db = new db_mysql('localhost', 'root', 'pass123', 'dss_permissions');
 
         $result = $db->read_query($query)[0];
 
