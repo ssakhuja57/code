@@ -11,17 +11,17 @@ if (count($argv) != 1){
 
 if ($argv[1] == 'create_users'){
 
-        $output_file = './create_users.sql'
+        $output_file = './create_users.sql';
 
         /*
         To make it simple, all users will be granted usage on all schemas listed in the dss_permissions tables.
         It is okay to do this since just usage on the schema alone does not give access to its objects.
         */
-        $query_create_users = "select u.uname, u.password from users u;"
+        $query_create_users = "select u.uname, u.password from users u;";
 
         $query_grant_usage = "select s.owning_schema, u.uname
                                from users u cross join
-                                (select distinct owning_schema from views) s;"
+                                (select distinct owning_schema from views) s;";
 
         $db = new db_mysql('localhost', 'root', 'pass123', 'dss_permissions');
 
@@ -41,7 +41,7 @@ if ($argv[1] == 'create_users'){
 }
 
 
-elseif ($arg[1] == 'generate_permissions'){
+elseif ($argv[1] == 'generate_permissions'){
 
 
         $output_file = './grants.sql';
