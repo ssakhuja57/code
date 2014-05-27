@@ -103,7 +103,7 @@ class db_odbc {
 	output:
 	- html select tag with options from the output of the query
 	*/
-	function get_html_select($query, $css_class){
+	function get_html_options($query, $css_class){
 	        $options = $this->read_query($query)[0]
 	        $res = '';
 	        foreach($options as $option)
@@ -117,7 +117,7 @@ class db_odbc {
 	assigned for the value attribute of each option element. Query provided should
 	return two columns, the first being the value and second being the display value.
 	*/
-	function get_html_select_2($query, $css_class){
+	function get_html_options_2($query, $css_class){
 	        $options = $this->read_query($query)[0];
 	        $res = '';
 	        foreach($options as $option)
