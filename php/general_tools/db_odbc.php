@@ -103,14 +103,13 @@ class db_odbc {
 	output:
 	- html select tag with options from the output of the query
 	*/
-	function get_html_select($query, $name, $css_class){
-	        $options = $this->read_query($query)[0];
-	        $select = sprintf('<select name="%s" class="%s">', $name, $css_class) . "\n";
+	function get_html_select($query, $css_class){
+	        $options = $this->read_query($query)[0]
+	        $res = '';
 	        foreach($options as $option)
-	                $select .= sprintf('<option value="%s" class="%s">%s</option>', $option[0], $css_class, $option[0]) . "\n";
-	        $select .= '</select>' . "\n";
-	
-	        return $select;
+	                $res .= sprintf('<option value="%s" class="%s">%s</option>', $option[0], $css_class, $option[0]) . "\n";
+	        
+	        return $res;
 	        }
 	
 	/*
@@ -118,14 +117,13 @@ class db_odbc {
 	assigned for the value attribute of each option element. Query provided should
 	return two columns, the first being the value and second being the display value.
 	*/
-	function get_html_select_2($query, $name, $css_class){
+	function get_html_select_2($query, $css_class){
 	        $options = $this->read_query($query)[0];
-	        $select = sprintf('<select name="%s" class="%s">', $name, $css_class) . "\n";
+	        $res = '';
 	        foreach($options as $option)
-	                $select .= sprintf('<option value="%s" class="%s">%s</option>', $option[0], $css_class, $option[1]) . "\n";
-	        $select .= '</select>' . "\n";
+	                $res .= sprintf('<option value="%s" class="%s">%s</option>', $option[0], $css_class, $option[1]) . "\n";
 	
-	        return $select;
+	        return $res;
 	        }
 
 	
